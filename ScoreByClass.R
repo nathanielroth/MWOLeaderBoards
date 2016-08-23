@@ -31,5 +31,6 @@ par(las=3)
 par(mar=c(8,4,4,4))
 
 dfAssault <- drop.levels(dfAssault)
-plot(dfAssault$Mech, dfAssault$Score, main="Score by Mech", ylab="Score")
+boxplot(Score~Mech, data=dfAssault, main="Score by Mech", las=3)
+
 
