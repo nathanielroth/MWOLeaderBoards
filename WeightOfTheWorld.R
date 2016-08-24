@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 library(gdata)
+library(reshape2)
+
 
 dfLB <- read.csv("WeightOfTheWorld.csv")
 dfMechs <- read.csv("Mechs.csv")
@@ -28,6 +30,8 @@ dfHeavy <- drop.levels(dfScore[dfScore$Class == 'Heavy',])
 dfAssault <- drop.levels(dfScore[dfScore$Class == 'Assault',])
 
 par(mar=c(10,4,4,4))
+
+
 
 
 # IS Vs Clan
@@ -50,11 +54,16 @@ table(dfMedium$ISCL)
 counts <- table(dfMedium$ISCL,dfMedium$Mech)
 barplot(counts, main = "Medium", legend = rownames(counts), las = 3 )
 
+
 # Heavy
 t(table(dfHeavy$Mech))
 table(dfHeavy$ISCL)
 counts <- table(dfHeavy$ISCL,dfHeavy$Mech)
 barplot(counts, main = "Heavy", legend = rownames(counts), las = 3 )
+
+aggregate(dfHeavy, by=list(dfHeavy$ISCL), FUN=mean)
+aggregate(dfHeavy$Place, by=list(dfHeavy$ISCL), FUN=median)
+
 
 # Assault
 t(table(dfAssault$Mech))
