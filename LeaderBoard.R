@@ -86,5 +86,22 @@ dfResults_Tons <- mech_mean_Tons[,c("Mech","Score")]
 dfResults_Tons$pred <- resid_mean_Tons$predAll
 dfResults_Tons$mean_resid <- resid_mean_Tons$residAll
 dfResults_Tons$median_resid <- resid_median_Tons$residAll
-write.csv(dfResults_Tons, file="results_full_tons.csv")
+write.csv(dfResults_Tons, file="results_full_tons_wCyclops.csv")
+
+# predit Full with tons
+dfFull_Tons_log <- dfFull
+dfFull_Tons_log$lScore <- log(dfFull_Tons_log$Score)
+dfFull_Tons_log$lTons <- log(dfFull_Tons_log$Tons)
+lmF_logTons <- lm(lScore ~ lTons, dfFull_Tons_log)
+summary(lmF_logTons)
+dfFull_Tons_log$predAll <- predict(lmF_logTons)
+dfFull_Tons_log$residAll <- dfFull_Tons_log$lScore - dfFull_Tons_log$predAll
+mech_mean_Tons <- aggregate(. ~ Mech, dfFull_Tons_log, function(lScore) c(mean = mean(lScore)))
+resid_mean_Tons <- aggregate(. ~ Mech, dfFull_Tons_log, function(residAll) c(mean = mean(residAll)))
+resid_median_Tons <- aggregate(. ~ Mech, dfFull_Tons_log, function(residAll) c(median = median(residAll)))
+dfResults_Tons <- mech_mean_Tons[,c("Mech","lScore")]
+dfResults_Tons$pred <- resid_mean_Tons$predAll
+dfResults_Tons$mean_resid <- resid_mean_Tons$residAll
+dfResults_Tons$median_resid <- resid_median_Tons$residAll
+write.csv(dfResults_Tons, file="results_full_tons_ll_wCyclops.csv")
 
