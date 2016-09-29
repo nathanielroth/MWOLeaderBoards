@@ -22,6 +22,7 @@ dfIS <- dfLB[dfLB$ISCL == 'IS',]
 dfClan <- dfLB[dfLB$ISCL == 'Clan',]
 dfLight <- dfLB[dfLB$Class == 'Light',]
 dfMedium <- dfLB[dfLB$Class == 'Medium',]
+dfHeavy <- dfLB[dfLB$Class == 'Heavy',]
 dfAssault <- dfLB[dfLB$Class == 'Assault',]
 
 # full DS Analysis
@@ -86,12 +87,14 @@ dfResults_Tons <- mech_mean_Tons[,c("Mech","Score")]
 dfResults_Tons$pred <- resid_mean_Tons$predAll
 dfResults_Tons$mean_resid <- resid_mean_Tons$residAll
 dfResults_Tons$median_resid <- resid_median_Tons$residAll
-write.csv(dfResults_Tons, file="results_full_tons_wCyclops.csv")
+write.csv(dfResults_Tons, file="results_full_tons.csv")
 
-# predit Full with tons
+# predit Full with tons Ln Ln tranformations
 dfFull_Tons_log <- dfFull
 dfFull_Tons_log$lScore <- log(dfFull_Tons_log$Score)
 dfFull_Tons_log$lTons <- log(dfFull_Tons_log$Tons)
+lmF_logTons_cl <- lm(lScore ~ lTons + ISCL, dfFull_Tons_log)
+summary(lmF_logTons_cl)
 lmF_logTons <- lm(lScore ~ lTons, dfFull_Tons_log)
 summary(lmF_logTons)
 dfFull_Tons_log$predAll <- predict(lmF_logTons)
@@ -103,5 +106,5 @@ dfResults_Tons <- mech_mean_Tons[,c("Mech","lScore")]
 dfResults_Tons$pred <- resid_mean_Tons$predAll
 dfResults_Tons$mean_resid <- resid_mean_Tons$residAll
 dfResults_Tons$median_resid <- resid_median_Tons$residAll
-write.csv(dfResults_Tons, file="results_full_tons_ll_wCyclops.csv")
+write.csv(dfResults_Tons, file="results_full_tons_ll.csv")
 
